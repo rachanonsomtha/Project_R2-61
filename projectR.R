@@ -318,3 +318,36 @@ dim(mydata[-train, ])
 data2 <-
   table(pred, mydata[-train, "size"])  #  [[]] gives the contents of a list
 confusionMatrix(data2, positive = "small")
+
+
+# Feature selection
+set.seed(131)
+
+forest_data <- read.csv("forestfires.csv")
+
+forest_data$temp <- normalise(forest_data$temp)
+forest_data$rain <- normalise(forest_data$rain)
+forest_data$RH <- normalise(forest_data$RH)
+forest_data$wind <- normalise(forest_data$wind)
+
+names(forest_data)
+
+# drop column day
+forest_data <- subset(forest_data, select = -c(day))
+
+# Using Random Forest to select feature importance
+area.rf <-
+  randomForest(
+    area ~ .,
+    data = forest_data,
+    mtry = 3,
+    importance = TRUE,
+    na.action = na.omit
+  )
+
+print(area.rf)
+## Show "importance" of variables: higher value mean more important:
+round(importance(area.rf), 2)
+# first 5 imporntance attributes: temp, DMC, DC, FFMC, RH
+
+
