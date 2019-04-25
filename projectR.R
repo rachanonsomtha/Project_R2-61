@@ -161,12 +161,13 @@ standardize <- function(x) {(x - mean(x))}
 my.scaled.classes = apply(prin_data,2,function(x) (x-mean(x)))
 plot(my.scaled.classes,cex=0.9,col="blue",main="Plot",sub="Mean Scaled",xlim=c(-30,30))
 
-##############
+##############Prediction SVM
 mydata <- read.csv("http://archive.ics.uci.edu/ml/machine-learning-databases/f
 orest-fires/forestfires.csv")
 
+#nornalize data
 normalise <- function(x) {
-  return((x - min(x)) / (max(x) - min(x)))  # subtract the min value in x and divide by the range of values in x.
+  return((x - min(x)) / (max(x) - min(x)))  
 }
 
 mydata$temp <- normalise(mydata$temp)
@@ -174,13 +175,13 @@ mydata$rain <- normalise(mydata$rain)
 mydata$RH <- normalise(mydata$RH)
 mydata$wind <- normalise(mydata$wind)
 
-sum(mydata$area < 5)  # ln(0 + 1) = 0
+sum(mydata$area < 5)  
 sum(mydata$area >= 5)
 
 mydata$size <- NULL
 mydata$size <- factor(ifelse(mydata$area < 5, 1, 0),
                       labels = c("small", "large"))
-train <- sample(x = nrow(mydata), size = 400, replace = FALSE)  # sample takes place from 1:x, convenience
+train <- sample(x = nrow(mydata), size = 400, replace = FALSE)
 
 library(kernlab)
 
@@ -198,9 +199,12 @@ m.tan <- ksvm(size ~ temp + RH + wind + rain,
               data = mydata[train, ],
               kernel = "tanhdot", C = 1)
 m.tan
-
+#use  m.rad training error 24%
 pred <- predict(m.rad, newdata = mydata[-train, ], type = "response")
+
 library(e1071)
-library(caret)
+library(caret) # include library to use confusionMatrix
+table(pred, mydata[-train, "size"])
+dim(mydata[-train,])
 data2 <- table(pred, mydata[-train, "size"])  #  [[]] gives the contents of a list
 confusionMatrix(data2, positive = "small")
