@@ -4,12 +4,13 @@ orest-fires/forestfires.csv")
 #Prepearing data
 
 n_row = nrow(forest_fire)
-
-forest_fire
+head(forest_fire)
 
 forest_area <- forest_fire$area
 #Forest freq with area
 hist(forest_area ,xlab = "Forest area", main ="Forest frequency with area", col="gray")
+hist(log(forest_area) ,xlab = "Log(Forest area)", main ="Forest frequency with area", col="gray")
+
 #Forest freq with Temperature
 hist(forest_fire$temp ,xlab = "Forest Temperature", main ="Forest frequency with Temperature", col="gray")
 
@@ -18,15 +19,14 @@ hist(forest_fire$temp ,xlab = "Forest Temperature", main ="Forest frequency with
 #True =>  observed&&forest fires are triggered
 #False  =>  observed&&forest fires aren't triggered
 round(table(forest_area==0)/(n_row),3)
-
+#check if NA avaliable?
 summary(forest_fire)
 summary(forest_fire$month)
 
 par(mfrow=c(3,3))
 
-forest_fire <- forest_fire[forest_fire$area>0,]
-forest_fire
-
+forest_fire <- forest_fire[forest_fire$area>0 ,]
+dim(forest_fire)
 
 plot(log(area)~as.factor(X), data = forest_fire, xlab = "X", ylab = "fire area",
         main = "forest fire area for different X's")
@@ -55,6 +55,8 @@ plot(log(area)~forest_fire$ISI, data = forest_fire, xlab = "ISI's", ylab = "fire
 plot(log(area)~forest_fire$temp, data = forest_fire, xlab = "temp's", ylab = "fire area", 
         main = "forest fire area for different temp's")
 
+par(mfrow=c(2,2))
+
 plot(log(area)~forest_fire$RH, data = forest_fire, xlab = "RH's", ylab = "fire area", 
         main = "forest fire area for different RH's")
 
@@ -78,27 +80,27 @@ for (i in 1:n_row){
   if (forest_fire$month[i] %in% c("aug","jul","jun")) forest_fire$season[i] <- "summer"
 }
 forest_fire$season <- as.factor(forest_fire$season)
+par(mfrow=c(1,1))
+
 boxplot(log(area)~season, data = forest_fire, xlab = "season", ylab = "fire area",
         main = "forest fire area for different seasons")
-
-boxplot(log(area)~month, data = forest_fire, xlab = "month", ylab = "fire area", 
-        main = "forest fire area for different months")
-
-par(mfrow=c(3,3))
-plot(log(area) ~ FFMC + DMC + DC + ISI + temp + RH + wind + rain +season,
-     data = forest_fire)
-par(mfrow=c(1,1))
+#Summer have less forest fire area
 
 #season
 reg_season = lm(log(forest_fire$area)~forest_fire$season, data = forest_fire)
 summary(reg_season)
+
+
+par(mfrow=c(2,2))
+plot(log(area) ~ FFMC + DMC + DC + ISI + temp + RH + wind + rain +season,
+     data = forest_fire)
+par(mfrow=c(1,1))
 
 #day
 reg_day = lm(log(forest_fire$area)~day, data = forest_fire)
 summary(reg_day)
 
 model_all <- lm(area~season+X+Y+month+day+FFMC+DMC+DC+ISI+temp+RH+wind+rain, data=forest_fire)
-
 summary(model_all)
 
 set.seed(69)
@@ -133,6 +135,8 @@ plot(density(forest_train$area))
 plot(density(log(forest_train$rain))) # log
 plot(density(log(forest_train$area))) # log
 
+
+#################################
 forest_fire <- read.csv("http://archive.ics.uci.edu/ml/machine-learning-databases/f
 orest-fires/forestfires.csv")
 summary(forest_fire)
@@ -141,11 +145,62 @@ summary(forest_fire)
 prin_data <- forest_fire[c(1:2,5:12)]
 head(prin_data)
 
+sum(is.na(prin_data))
+
+
 pc <- princomp(prin_data)
 plot(pc)
 summary(pc)
+prin_data <- forest_fire[c(1:2)]
+head(prin_data)
 
-biplot(pc)
+pc
+plot(prin_data,cex=0.9,col="blue",main="Plot")
 
+standardize <- function(x) {(x - mean(x))}
+my.scaled.classes = apply(prin_data,2,function(x) (x-mean(x)))
+plot(my.scaled.classes,cex=0.9,col="blue",main="Plot",sub="Mean Scaled",xlim=c(-30,30))
 
+##############
+mydata <- read.csv("http://archive.ics.uci.edu/ml/machine-learning-databases/f
+orest-fires/forestfires.csv")
 
+normalise <- function(x) {
+  return((x - min(x)) / (max(x) - min(x)))  # subtract the min value in x and divide by the range of values in x.
+}
+
+mydata$temp <- normalise(mydata$temp)
+mydata$rain <- normalise(mydata$rain)
+mydata$RH <- normalise(mydata$RH)
+mydata$wind <- normalise(mydata$wind)
+
+sum(mydata$area < 5)  # ln(0 + 1) = 0
+sum(mydata$area >= 5)
+
+mydata$size <- NULL
+mydata$size <- factor(ifelse(mydata$area < 5, 1, 0),
+                      labels = c("small", "large"))
+train <- sample(x = nrow(mydata), size = 400, replace = FALSE)  # sample takes place from 1:x, convenience
+
+library(kernlab)
+
+m.poly <- ksvm(size ~ temp + RH + wind + rain,
+               data = mydata[train, ],
+               kernel = "polydot", C = 1)
+m.poly
+
+m.rad <- ksvm(size ~ temp + RH + wind + rain,
+              data = mydata[train, ],
+              kernel = "rbfdot", C = 1)
+m.rad
+
+m.tan <- ksvm(size ~ temp + RH + wind + rain,
+              data = mydata[train, ],
+              kernel = "tanhdot", C = 1)
+m.tan
+
+pred <- predict(m.rad, newdata = mydata[-train, ], type = "response")
+library(e1071)
+library(caret)
+data2 <- table(pred, mydata[-train, "size"])  #  [[]] gives the contents of a list
+confusionMatrix(data2, positive = "small")
