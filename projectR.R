@@ -31,6 +31,7 @@ round(table(forest_area == 0) / (n_row), 3)
 summary(forest_fire)
 summary(forest_fire$month)
 
+par(mfrow = c(3, 3))
 
 forest_fire <- forest_fire[forest_fire$area > 0 , ]
 dim(forest_fire)
@@ -170,6 +171,10 @@ boxplot(
 reg_season = lm(log(forest_fire$area) ~ forest_fire$season, data = forest_fire)
 summary(reg_season)
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d3bf8147f16d436422521e8ec7c6993e974d4b79
 par(mfrow = c(2, 2))
 plot(log(area) ~ FFMC + DMC + DC + ISI + temp + RH + wind + rain + season,
      data = forest_fire)
@@ -276,6 +281,10 @@ mydata$rain <- normalise(mydata$rain)
 
 mydata$RH <- normalise(mydata$RH)
 mydata$wind <- normalise(mydata$wind)
+<<<<<<< HEAD
+=======
+
+>>>>>>> d3bf8147f16d436422521e8ec7c6993e974d4b79
 sum(mydata$area < 5)
 sum(mydata$area >= 5)
 
@@ -330,7 +339,6 @@ set.seed(131)
 
 forest_data <-
   read.csv("forestfires.csv")
-
 forest_data$temp <- normalise(forest_data$temp)
 forest_data$rain <- normalise(forest_data$rain)
 forest_data$RH <- normalise(forest_data$RH)
