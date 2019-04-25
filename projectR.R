@@ -33,7 +33,7 @@ summary(forest_fire$month)
 
 par(mfrow = c(3, 3))
 
-forest_fire <- forest_fire[forest_fire$area > 0 , ]
+forest_fire <- forest_fire[forest_fire$area > 0 ,]
 dim(forest_fire)
 
 plot(
@@ -171,10 +171,10 @@ boxplot(
 reg_season = lm(log(forest_fire$area) ~ forest_fire$season, data = forest_fire)
 summary(reg_season)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> d3bf8147f16d436422521e8ec7c6993e974d4b79
+<  <  <  <  <  <  < HEAD
+==  ==  ==  =
+  
+  >  >  >  >  >  >  > d3bf8147f16d436422521e8ec7c6993e974d4b79
 par(mfrow = c(2, 2))
 plot(log(area) ~ FFMC + DMC + DC + ISI + temp + RH + wind + rain + season,
      data = forest_fire)
@@ -194,14 +194,14 @@ set.seed(69)
 row.number <- sample(1:nrow(forest), size = 0.2 * nrow(forest))
 forest
 row.number
-forest_test <-  forest[row.number, ]
+forest_test <-  forest[row.number,]
 dim(forest_test) ## Size of the testing set
-forest_train <- forest[-row.number, ]
+forest_train <- forest[-row.number,]
 dim(forest_train)  ## Size of training set
 summary(forest_train)
 
 #check the correlation matrix
-M <- cor(forest_train[, -c(3, 4)])
+M <- cor(forest_train[,-c(3, 4)])
 M
 
 #correlation plot correlation between variables
@@ -230,7 +230,7 @@ par(mfrow = c(1, 1))
 forest_fire <- read.csv("forestfires.csv")
 
 summary(forest_fire)
-forest_fire <- forest_fire[forest_fire$area > 0,]
+forest_fire <- forest_fire[forest_fire$area > 0, ]
 summary(forest_fire)
 prin_data <- forest_fire[c(1:2, 5:12)]
 head(prin_data)
@@ -281,10 +281,10 @@ mydata$rain <- normalise(mydata$rain)
 
 mydata$RH <- normalise(mydata$RH)
 mydata$wind <- normalise(mydata$wind)
-<<<<<<< HEAD
-=======
-
->>>>>>> d3bf8147f16d436422521e8ec7c6993e974d4b79
+<  <  <  <  <  <  < HEAD
+==  ==  ==  =
+  
+  >  >  >  >  >  >  > d3bf8147f16d436422521e8ec7c6993e974d4b79
 sum(mydata$area < 5)
 sum(mydata$area >= 5)
 
@@ -300,7 +300,7 @@ library(kernlab)
 
 m.poly <- ksvm(
   size ~ temp + RH + wind + rain,
-  data = mydata[train,],
+  data = mydata[train, ],
   kernel = "polydot",
   C = 1
 )
@@ -308,7 +308,7 @@ m.poly
 
 m.rad <- ksvm(
   size ~ temp + RH + wind + rain,
-  data = mydata[train,],
+  data = mydata[train, ],
   kernel = "rbfdot",
   C = 1
 )
@@ -316,19 +316,19 @@ m.rad
 
 m.tan <- ksvm(
   size ~ temp + RH + wind + rain,
-  data = mydata[train,],
+  data = mydata[train, ],
   kernel = "tanhdot",
   C = 1
 )
 m.tan
 #use  m.rad training error 24%
 pred <-
-  predict(m.rad, newdata = mydata[-train,], type = "response")
+  predict(m.rad, newdata = mydata[-train, ], type = "response")
 
 library(e1071)
 library(caret) # include library to use confusionMatrix
 table(pred, mydata[-train, "size"])
-dim(mydata[-train, ])
+dim(mydata[-train,])
 data2 <-
   table(pred, mydata[-train, "size"])  #  [[]] gives the contents of a list
 confusionMatrix(data2, positive = "small")
