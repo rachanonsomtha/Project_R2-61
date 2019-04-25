@@ -171,7 +171,6 @@ boxplot(
 reg_season = lm(log(forest_fire$area) ~ forest_fire$season, data = forest_fire)
 summary(reg_season)
 
-
 par(mfrow = c(2, 2))
 plot(log(area) ~ FFMC + DMC + DC + ISI + temp + RH + wind + rain + season,
      data = forest_fire)
@@ -206,6 +205,7 @@ par(mfrow = c(1, 1))
 corrplot(M, method = 'number', bg = "white")
 
 # And density curve for other variables also
+
 plot(density(forest_train$FFMC))
 plot(density(forest_train$DMC))
 plot(density(forest_train$DC))
@@ -215,13 +215,15 @@ plot(density(forest_train$RH))
 plot(density(forest_train$wind))
 plot(density(forest_train$rain))
 plot(density(forest_train$area))
+par(mfrow = c(1, 2))
 
 plot(density(log(forest_train$rain))) # log
 plot(density(log(forest_train$area))) # log
+par(mfrow = c(1, 1))
 
 
 #################################
-forest_fire <-read.csv("forestfires.csv")
+forest_fire <- read.csv("forestfires.csv")
 
 summary(forest_fire)
 forest_fire <- forest_fire[forest_fire$area > 0,]
@@ -259,18 +261,22 @@ plot(
 )
 
 ##############Prediction SVM
-mydata <-read.csv("forestfires.csv")
+mydata <- read.csv("forestfires.csv")
+
+#mydata <- mydata[mydata$area>0,]
 
 #nornalize data
 normalise <- function(x) {
   return((x - min(x)) / (max(x) - min(x)))
 }
 
+dim(mydata)
+
 mydata$temp <- normalise(mydata$temp)
 mydata$rain <- normalise(mydata$rain)
+
 mydata$RH <- normalise(mydata$RH)
 mydata$wind <- normalise(mydata$wind)
-
 sum(mydata$area < 5)
 sum(mydata$area >= 5)
 
@@ -325,8 +331,8 @@ confusionMatrix(data2, positive = "small")
 # Feature selection
 set.seed(131)
 
-forest_data <- read.csv("forestfires.csv")
-
+forest_data <-
+  read.csv("forestfires.csv")
 forest_data$temp <- normalise(forest_data$temp)
 forest_data$rain <- normalise(forest_data$rain)
 forest_data$RH <- normalise(forest_data$RH)
@@ -346,6 +352,7 @@ space <- sample(x = nrow(forest_data),
 forest_train <- forest_data[space,]
 forest_test <- forest_data[-space,]
 
+library(randomForest)
 # Using Random Forest to select feature importance
 
 # Random forest model
