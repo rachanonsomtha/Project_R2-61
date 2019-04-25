@@ -133,11 +133,19 @@ plot(density(forest_train$area))
 plot(density(log(forest_train$rain))) # log
 plot(density(log(forest_train$area))) # log
 
+forest_fire <- read.csv("http://archive.ics.uci.edu/ml/machine-learning-databases/f
+orest-fires/forestfires.csv")
+summary(forest_fire)
+forest_fire <- forest_fire[forest_fire$area >0, ]
+summary(forest_fire)
+prin_data <- forest_fire[c(1:2,5:12)]
+head(prin_data)
 
+pc <- princomp(prin_data)
+plot(pc)
+summary(pc)
 
-
-
-
+biplot(pc)
 
 
 
