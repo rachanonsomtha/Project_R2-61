@@ -351,3 +351,9 @@ round(importance(area.rf), 2)
 # first 5 imporntance attributes: temp, DMC, DC, FFMC, RH
 
 
+# Logistic Regression
+lr = glm(area ~ ., data = forest_data)
+summary(lr)
+
+lr.importance =  glm(area ~ temp + DMC + DC + FFMC + RH, data = forest_data)
+summary(lr.importance)
