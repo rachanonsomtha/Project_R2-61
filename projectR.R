@@ -1,4 +1,4 @@
-forest_fire <- read.csv("forestfires.csv")
+forest_fire <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
 
 #Prepearing data
 
@@ -221,7 +221,7 @@ par(mfrow = c(1, 1))
 
 
 #################################
-forest_fire <- read.csv("forestfires.csv")
+forest_fire <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
 
 summary(forest_fire)
 forest_fire <- forest_fire[forest_fire$area > 0,]
@@ -259,7 +259,7 @@ plot(
 )
 
 ##############Prediction SVM
-mydata <- read.csv("forestfires.csv")
+mydata <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
 
 #mydata <- mydata[mydata$area>0,]
 
@@ -329,7 +329,7 @@ confusionMatrix(data2, positive = "small")
 set.seed(131)
 
 forest_data <-
-  read.csv("forestfires.csv")
+  read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
 forest_data$temp <- normalise(forest_data$temp)
 forest_data$rain <- normalise(forest_data$rain)
 forest_data$RH <- normalise(forest_data$RH)
@@ -354,7 +354,6 @@ print(area.rf)
 ## Show "importance" of variables: higher value mean more important:
 round(importance(area.rf), 2)
 # first 5 imporntance attributes: temp, DMC, DC, FFMC, RH
-
 
 # Logistic Regression
 lr = glm(area ~ ., data = forest_data)
