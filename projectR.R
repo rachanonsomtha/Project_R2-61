@@ -171,10 +171,6 @@ boxplot(
 reg_season = lm(log(forest_fire$area) ~ forest_fire$season, data = forest_fire)
 summary(reg_season)
 
-<<<<<<< HEAD
-=======
-
->>>>>>> d3bf8147f16d436422521e8ec7c6993e974d4b79
 par(mfrow = c(2, 2))
 plot(log(area) ~ FFMC + DMC + DC + ISI + temp + RH + wind + rain + season,
      data = forest_fire)
@@ -281,10 +277,6 @@ mydata$rain <- normalise(mydata$rain)
 
 mydata$RH <- normalise(mydata$RH)
 mydata$wind <- normalise(mydata$wind)
-<<<<<<< HEAD
-=======
-
->>>>>>> d3bf8147f16d436422521e8ec7c6993e974d4b79
 sum(mydata$area < 5)
 sum(mydata$area >= 5)
 
@@ -334,6 +326,8 @@ data2 <-
 confusionMatrix(data2, positive = "small")
 
 
+################
+
 # Feature selection
 set.seed(131)
 
@@ -348,26 +342,89 @@ names(forest_data)
 
 # drop column day
 forest_data <- subset(forest_data, select = -c(day))
+
+
+# 80% train 20 % test
+space <- sample(x = nrow(forest_data),
+                size = 0.2 * nrow(forest_data),
+                replace = FALSE)
+
+forest_train <- forest_data[space,]
+forest_test <- forest_data[-space,]
+
 library(randomForest)
 # Using Random Forest to select feature importance
-area.rf <-
+
+# Random forest model
+rf <-
   randomForest(
     area ~ .,
-    data = forest_data,
+    data = forest_train,
     mtry = 3,
-    importance = TRUE,
-    na.action = na.omit
+    importance = TRUE
   )
 
-print(area.rf)
+# Random forest model with feature importance
+rf.importance <-
+  randomForest(
+    area ~ temp+ DMC+ DC + FFMC + RH,
+    data = forest_train,
+    mtry = 3,
+    importance = TRUE
+  )
+
+summary(rf)
 ## Show "importance" of variables: higher value mean more important:
-round(importance(area.rf), 2)
+round(importance(rf), 2)
 # first 5 imporntance attributes: temp, DMC, DC, FFMC, RH
 
 
 # Logistic Regression
-lr = glm(area ~ ., data = forest_data)
+lr = glm(area ~ ., data = forest_train)
 summary(lr)
 
-lr.importance =  glm(area ~ temp + DMC + DC + FFMC + RH, data = forest_data)
+# Logistic Regression with feature importance
+lr.importance =  glm(area ~ temp + DMC + DC + FFMC + RH, data = forest_train)
 summary(lr.importance)
+
+
+# Linear Regression 
+lmr <- lm(area~.,data=forest_train)
+summary(lmr)
+
+# Linear Regression with feature importance 
+lmr.importance <- lm(area~ temp + DMC + DC + FFMC + RH,data=forest_train)
+summary(lmr.importance)
+
+library(rpart)
+library(rpart.plot)
+
+# Decision tree 
+dt <- rpart(area~.,data=forest_train, control=rpart.control(minsplit=5))
+summary(dt)
+
+# Decision Tree with feature importance 
+dt.importance <- rpart(area~temp + DMC + DC + FFMC + RH,data=forest_train, control=rpart.control(minsplit=5))
+summary(dt.importance)
+
+MSE <- function(model, test, Y) {
+  predictions <- predict(model, test)
+  mse <- mean((Y - predictions) ^ 2)
+  return(mse)
+}
+
+test = forest_test
+Y = forest_test$area
+
+showModelResult <- function() {
+  cat('Random Forest:', MSE(rf, test, Y), '\n')
+  cat('Random Forest2:',MSE(rf.importance, test, Y), '\n')
+  cat('Logistic Regression:',MSE(lr, test, Y), '\n')
+  cat('Logistic Regression2:',MSE(lr.importance, test, Y), '\n')
+  cat('Linear Regression:',MSE(lmr, test, Y), '\n')
+  cat('Linear Regression2:',MSE(lmr.importance, test, Y), '\n')
+  cat('Decition Tree:',MSE(dt, test, Y), '\n')
+  cat('Decition Tree2:',MSE(dt.importance, test, Y), '\n')
+}
+
+showModelResult()
