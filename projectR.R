@@ -146,41 +146,40 @@ plot(
 # visualize how data represent in line graph
 library(ggplot2)
 
-ggplot(data = forest_fire) + 
+ggplot(data = forest_fire) +
   geom_smooth(mapping = aes(x = X, y = area))
 
-ggplot(data = forest_fire) + 
+ggplot(data = forest_fire) +
   geom_smooth(mapping = aes(x = Y, y = area))
 
-ggplot(data = forest_fire) + 
+ggplot(data = forest_fire) +
   geom_smooth(mapping = aes(x = month, y = area))
 
-ggplot(data = forest_fire) + 
+ggplot(data = forest_fire) +
   geom_smooth(mapping = aes(x = day, y = area))
 
-ggplot(data = forest_fire) + 
+ggplot(data = forest_fire) +
   geom_smooth(mapping = aes(x = FFMC, y = area))
 
-ggplot(data = forest_fire) + 
+ggplot(data = forest_fire) +
   geom_smooth(mapping = aes(x = DMC, y = area))
 
-ggplot(data = forest_fire) + 
+ggplot(data = forest_fire) +
   geom_smooth(mapping = aes(x = DC, y = area))
 
-ggplot(data = forest_fire) + 
+ggplot(data = forest_fire) +
   geom_smooth(mapping = aes(x = ISI, y = area))
 
-ggplot(data = forest_fire) + 
+ggplot(data = forest_fire) +
   geom_smooth(mapping = aes(x = temp, y = area))
 
-ggplot(data = forest_fire) + 
+ggplot(data = forest_fire) +
   geom_smooth(mapping = aes(x = RH, y = area))
 
-ggplot(data = forest_fire) + 
+ggplot(data = forest_fire) +
   geom_smooth(mapping = aes(x = wind, y = area))
 
-
-ggplot(data = forest_fire) + 
+ggplot(data = forest_fire) +
   geom_smooth(mapping = aes(x = rain, y = area))
 
 #################################
@@ -253,7 +252,10 @@ par(mfrow = c(1, 1))
 
 library(corrplot)
 
-corrplot(M, order = "hclust", tl.col = "black", tl.srt = 45)
+corrplot(M,
+         order = "hclust",
+         tl.col = "black",
+         tl.srt = 45)
 
 # And density curve for other variables also
 
@@ -361,7 +363,7 @@ forest_data$wind <- normalise(forest_data$wind)
 names(forest_data)
 
 # drop column day
-forest_data <- subset(forest_data, select = -c(day,month))
+forest_data <- subset(forest_data, select = -c(day, month))
 
 
 # 80% train 20 % test
