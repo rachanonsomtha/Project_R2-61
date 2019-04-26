@@ -385,21 +385,24 @@ rf <-
                data = forest_train,
                mtry = 3,
                importance = TRUE)
+## Show "importance" of variables: higher value mean more important:
+imp = round(importance(rf), 2)
+imp_value = imp[,"IncNodePurity"]
+df = data.frame(class=names(imp_value), importance=imp_value)
+plot(df, aes(x=class))
+
+# first 5 imporntance attributes: temp, DMC, DC, FFMC, RH
 
 # Random forest model with feature importance
 rf.importance <-
   randomForest(
     area ~ temp + DMC + DC + FFMC + RH,
     data = forest_train,
-    mtry = 3,
-    importance = TRUE
+    mtry = 3
   )
 
 summary(rf)
-## Show "importance" of variables: higher value mean more important:
-round(importance(rf), 2)
-# first 5 imporntance attributes: temp, DMC, DC, FFMC, RH
-
+summary(rf.importance)
 
 # Logistic Regression
 lr = glm(area ~ ., data = forest_train)
