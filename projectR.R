@@ -331,8 +331,10 @@ confusionMatrix(data2, positive = "small")
 # Feature selection
 set.seed(131)
 
-forest_data <-
-  read.csv("forestfires.csv")
+setwd('C:/Users/Tusave/Desktop/Dev/CPE/R/res')
+
+forest_data <- read.csv("forestfires.csv")
+
 forest_data$temp <- normalise(forest_data$temp)
 forest_data$rain <- normalise(forest_data$rain)
 forest_data$RH <- normalise(forest_data$RH)
@@ -341,7 +343,7 @@ forest_data$wind <- normalise(forest_data$wind)
 names(forest_data)
 
 # drop column day
-forest_data <- subset(forest_data, select = -c(day))
+forest_data <- subset(forest_data, select = -c(day,month))
 
 
 # 80% train 20 % test
@@ -352,10 +354,12 @@ space <- sample(x = nrow(forest_data),
 forest_train <- forest_data[space,]
 forest_test <- forest_data[-space,]
 
-library(randomForest)
 # Using Random Forest to select feature importance
 
 # Random forest model
+
+library(randomForest)
+
 rf <-
   randomForest(
     area ~ .,
