@@ -250,8 +250,10 @@ M
 
 #correlation plot correlation between variables
 par(mfrow = c(1, 1))
+
 library(corrplot)
-corrplot(M, method = 'number', bg = "white")
+
+corrplot(M, order = "hclust", tl.col = "black", tl.srt = 45)
 
 # And density curve for other variables also
 
