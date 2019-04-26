@@ -1,4 +1,7 @@
-forest_fire <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
+forest_fire <-
+  read.csv(
+    "https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv"
+  )
 
 #Prepearing data
 
@@ -31,7 +34,7 @@ round(table(forest_area == 0) / (n_row), 3)
 summary(forest_fire)
 summary(forest_fire$month)
 
-forest_fire <- forest_fire[forest_fire$area > 0 , ]
+forest_fire <- forest_fire[forest_fire$area > 0 ,]
 dim(forest_fire)
 
 plot(
@@ -185,19 +188,22 @@ model_all <-
 summary(model_all)
 
 set.seed(69)
-forest <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
+forest <-
+  read.csv(
+    "https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv"
+  )
 
 row.number <- sample(1:nrow(forest), size = 0.2 * nrow(forest))
 forest
 row.number
-forest_test <-  forest[row.number, ]
+forest_test <-  forest[row.number,]
 dim(forest_test) ## Size of the testing set
-forest_train <- forest[-row.number, ]
+forest_train <- forest[-row.number,]
 dim(forest_train)  ## Size of training set
 summary(forest_train)
 
 #check the correlation matrix
-M <- cor(forest_train[, -c(3, 4)])
+M <- cor(forest_train[,-c(3, 4)])
 M
 
 #correlation plot correlation between variables
@@ -224,45 +230,13 @@ par(mfrow = c(1, 1))
 
 
 #################################
-forest_fire <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
 
-summary(forest_fire)
-forest_fire <- forest_fire[forest_fire$area > 0,]
-summary(forest_fire)
-prin_data <- forest_fire[c(1:2, 5:12)]
-head(prin_data)
-
-sum(is.na(prin_data))
-
-
-pc <- princomp(prin_data)
-plot(pc)
-summary(pc)
-prin_data <- forest_fire[c(1:2)]
-head(prin_data)
-
-pc
-plot(prin_data,
-     cex = 0.9,
-     col = "blue",
-     main = "Plot")
-
-standardize <- function(x) {
-  (x - mean(x))
-}
-my.scaled.classes = apply(prin_data, 2, function(x)
-  (x - mean(x)))
-plot(
-  my.scaled.classes,
-  cex = 0.9,
-  col = "blue",
-  main = "Plot",
-  sub = "Mean Scaled",
-  xlim = c(-30, 30)
-)
 
 ##############Prediction SVM
-mydata <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
+mydata <-
+  read.csv(
+    "https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv"
+  )
 
 #mydata <- mydata[mydata$area>0,]
 
@@ -275,7 +249,6 @@ dim(mydata)
 
 mydata$temp <- normalise(mydata$temp)
 mydata$rain <- normalise(mydata$rain)
-
 mydata$RH <- normalise(mydata$RH)
 mydata$wind <- normalise(mydata$wind)
 sum(mydata$area < 5)
@@ -293,7 +266,7 @@ library(kernlab)
 
 m.poly <- ksvm(
   size ~ temp + RH + wind + rain,
-  data = mydata[train,],
+  data = mydata[train, ],
   kernel = "polydot",
   C = 1
 )
@@ -301,7 +274,7 @@ m.poly
 
 m.rad <- ksvm(
   size ~ temp + RH + wind + rain,
-  data = mydata[train,],
+  data = mydata[train, ],
   kernel = "rbfdot",
   C = 1
 )
@@ -309,19 +282,19 @@ m.rad
 
 m.tan <- ksvm(
   size ~ temp + RH + wind + rain,
-  data = mydata[train,],
+  data = mydata[train, ],
   kernel = "tanhdot",
   C = 1
 )
 m.tan
-#use  m.rad training error 24%
+#use  m.rad training error 18%
 pred <-
-  predict(m.rad, newdata = mydata[-train,], type = "response")
+  predict(m.rad, newdata = mydata[-train, ], type = "response")
 
 library(e1071)
 library(caret) # include library to use confusionMatrix
 table(pred, mydata[-train, "size"])
-dim(mydata[-train, ])
+dim(mydata[-train,])
 data2 <-
   table(pred, mydata[-train, "size"])  #  [[]] gives the contents of a list
 confusionMatrix(data2, positive = "small")
@@ -332,7 +305,10 @@ confusionMatrix(data2, positive = "small")
 # Feature selection
 set.seed(131)
 
-forest_data <-read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
+forest_data <-
+  read.csv(
+    "https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv"
+  )
 forest_data$temp <- normalise(forest_data$temp)
 forest_data$rain <- normalise(forest_data$rain)
 forest_data$RH <- normalise(forest_data$RH)
@@ -345,29 +321,29 @@ forest_data <- subset(forest_data, select = -c(day))
 
 
 # 80% train 20 % test
-space <- sample(x = nrow(forest_data),
-                size = 0.2 * nrow(forest_data),
-                replace = FALSE)
+space <- sample(
+  x = nrow(forest_data),
+  size = 0.2 * nrow(forest_data),
+  replace = FALSE
+)
 
-forest_train <- forest_data[space,]
-forest_test <- forest_data[-space,]
+forest_train <- forest_data[space, ]
+forest_test <- forest_data[-space, ]
 
 library(randomForest)
 # Using Random Forest to select feature importance
 
 # Random forest model
 rf <-
-  randomForest(
-    area ~ .,
-    data = forest_train,
-    mtry = 3,
-    importance = TRUE
-  )
+  randomForest(area ~ .,
+               data = forest_train,
+               mtry = 3,
+               importance = TRUE)
 
 # Random forest model with feature importance
 rf.importance <-
   randomForest(
-    area ~ temp+ DMC+ DC + FFMC + RH,
+    area ~ temp + DMC + DC + FFMC + RH,
     data = forest_train,
     mtry = 3,
     importance = TRUE
@@ -388,23 +364,29 @@ lr.importance =  glm(area ~ temp + DMC + DC + FFMC + RH, data = forest_train)
 summary(lr.importance)
 
 
-# Linear Regression 
-lmr <- lm(area~.,data=forest_train)
+# Linear Regression
+lmr <- lm(area ~ ., data = forest_train)
 summary(lmr)
 
-# Linear Regression with feature importance 
-lmr.importance <- lm(area~ temp + DMC + DC + FFMC + RH,data=forest_train)
+# Linear Regression with feature importance
+lmr.importance <-
+  lm(area ~ temp + DMC + DC + FFMC + RH, data = forest_train)
 summary(lmr.importance)
 
 library(rpart)
 library(rpart.plot)
 
-# Decision tree 
-dt <- rpart(area~.,data=forest_train, control=rpart.control(minsplit=5))
+# Decision tree
+dt <-
+  rpart(area ~ ., data = forest_train, control = rpart.control(minsplit =
+                                                                 5))
 summary(dt)
 
-# Decision Tree with feature importance 
-dt.importance <- rpart(area~temp + DMC + DC + FFMC + RH,data=forest_train, control=rpart.control(minsplit=5))
+# Decision Tree with feature importance
+dt.importance <-
+  rpart(area ~ temp + DMC + DC + FFMC + RH,
+        data = forest_train,
+        control = rpart.control(minsplit = 5))
 summary(dt.importance)
 
 MSE <- function(model, test, Y) {
@@ -418,13 +400,13 @@ Y = forest_test$area
 
 showModelResult <- function() {
   cat('Random Forest:', MSE(rf, test, Y), '\n')
-  cat('Random Forest2:',MSE(rf.importance, test, Y), '\n')
-  cat('Logistic Regression:',MSE(lr, test, Y), '\n')
-  cat('Logistic Regression2:',MSE(lr.importance, test, Y), '\n')
-  cat('Linear Regression:',MSE(lmr, test, Y), '\n')
-  cat('Linear Regression2:',MSE(lmr.importance, test, Y), '\n')
-  cat('Decition Tree:',MSE(dt, test, Y), '\n')
-  cat('Decition Tree2:',MSE(dt.importance, test, Y), '\n')
+  cat('Random Forest2:', MSE(rf.importance, test, Y), '\n')
+  cat('Logistic Regression:', MSE(lr, test, Y), '\n')
+  cat('Logistic Regression2:', MSE(lr.importance, test, Y), '\n')
+  cat('Linear Regression:', MSE(lmr, test, Y), '\n')
+  cat('Linear Regression2:', MSE(lmr.importance, test, Y), '\n')
+  cat('Decition Tree:', MSE(dt, test, Y), '\n')
+  cat('Decition Tree2:', MSE(dt.importance, test, Y), '\n')
 }
 
 showModelResult()
