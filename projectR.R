@@ -143,6 +143,48 @@ plot(
   main = "forest fire area for different Rain's"
 )
 
+# visualize how data represent in line graph
+library(ggplot2)
+
+ggplot(data = forest_fire) + 
+  geom_smooth(mapping = aes(x = X, y = area))
+
+ggplot(data = forest_fire) + 
+  geom_smooth(mapping = aes(x = Y, y = area))
+
+ggplot(data = forest_fire) + 
+  geom_smooth(mapping = aes(x = month, y = area))
+
+ggplot(data = forest_fire) + 
+  geom_smooth(mapping = aes(x = day, y = area))
+
+ggplot(data = forest_fire) + 
+  geom_smooth(mapping = aes(x = FFMC, y = area))
+
+ggplot(data = forest_fire) + 
+  geom_smooth(mapping = aes(x = DMC, y = area))
+
+ggplot(data = forest_fire) + 
+  geom_smooth(mapping = aes(x = DC, y = area))
+
+ggplot(data = forest_fire) + 
+  geom_smooth(mapping = aes(x = ISI, y = area))
+
+ggplot(data = forest_fire) + 
+  geom_smooth(mapping = aes(x = temp, y = area))
+
+ggplot(data = forest_fire) + 
+  geom_smooth(mapping = aes(x = RH, y = area))
+
+ggplot(data = forest_fire) + 
+  geom_smooth(mapping = aes(x = wind, y = area))
+
+
+ggplot(data = forest_fire) + 
+  geom_smooth(mapping = aes(x = rain, y = area))
+
+#################################
+
 n_row = nrow(forest_fire)
 summary(forest_fire$area)
 
@@ -305,17 +347,10 @@ confusionMatrix(data2, positive = "small")
 # Feature selection
 set.seed(131)
 
-<<<<<<< HEAD
-setwd('C:/Users/Tusave/Desktop/Dev/CPE/R/res')
-
-forest_data <- read.csv("forestfires.csv")
-
-=======
 forest_data <-
   read.csv(
     "https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv"
   )
->>>>>>> 2d1a080ec36b12815db037047800494b45c0936d
 forest_data$temp <- normalise(forest_data$temp)
 forest_data$rain <- normalise(forest_data$rain)
 forest_data$RH <- normalise(forest_data$RH)
