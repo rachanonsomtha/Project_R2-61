@@ -1,4 +1,4 @@
-forest_fire <- read.csv("forestfires.csv")
+forest_fire <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
 
 #Prepearing data
 
@@ -30,8 +30,6 @@ round(table(forest_area == 0) / (n_row), 3)
 #check if NA avaliable?
 summary(forest_fire)
 summary(forest_fire$month)
-
-par(mfrow = c(3, 3))
 
 forest_fire <- forest_fire[forest_fire$area > 0 , ]
 dim(forest_fire)
@@ -187,6 +185,8 @@ model_all <-
 summary(model_all)
 
 set.seed(69)
+forest <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
+
 row.number <- sample(1:nrow(forest), size = 0.2 * nrow(forest))
 forest
 row.number
@@ -202,6 +202,7 @@ M
 
 #correlation plot correlation between variables
 par(mfrow = c(1, 1))
+library(corrplot)
 corrplot(M, method = 'number', bg = "white")
 
 # And density curve for other variables also
@@ -223,7 +224,7 @@ par(mfrow = c(1, 1))
 
 
 #################################
-forest_fire <- read.csv("forestfires.csv")
+forest_fire <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
 
 summary(forest_fire)
 forest_fire <- forest_fire[forest_fire$area > 0,]
@@ -261,7 +262,7 @@ plot(
 )
 
 ##############Prediction SVM
-mydata <- read.csv("forestfires.csv")
+mydata <- read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
 
 #mydata <- mydata[mydata$area>0,]
 
@@ -331,8 +332,7 @@ confusionMatrix(data2, positive = "small")
 # Feature selection
 set.seed(131)
 
-forest_data <-
-  read.csv("forestfires.csv")
+forest_data <-read.csv("https://archive.ics.uci.edu/ml/machine-learning-databases/forest-fires/forestfires.csv")
 forest_data$temp <- normalise(forest_data$temp)
 forest_data$rain <- normalise(forest_data$rain)
 forest_data$RH <- normalise(forest_data$RH)
